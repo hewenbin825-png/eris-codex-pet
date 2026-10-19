@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-19",
+  "release": "v2.0.0",
+  "target": "Windows x64",
+  "source_build": "passed",
+  "motion_self_test": {
+    "passed": true,
+    "version": "2.0-motion",
+    "clips": 5,
+    "nonrepeat_selections": 200,
+    "timeline_boundaries": true,
+    "wav_duration_matches": true,
+    "rendered": true,
+    "global_mouse_hook": false
+  },
+  "startup_logic_self_test": {
+    "passed": true,
+    "checks": 8,
+    "tests_use_fixtures": true,
+    "live_codex_not_restarted": true
+  },
+  "temp_install_remove_and_notification_tests": "passed; external processes and startup entries mocked",
+  "source_and_release_allowlist": "passed",
+  "private_path_and_secret_pattern_check": "passed",
+  "user_confirmed_click_audio_and_motion": true,
+  "actual_monitor_launch_observed": true,
+  "real_codex_completion_verified": false,
+  "windows_relogin_verified": false,
+  "full_codex_restart_verified": false
+}

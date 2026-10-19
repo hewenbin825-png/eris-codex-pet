@@ -1,0 +1,11 @@
+*.exe
+*.pdb
+__pycache__/
+runtime/
+assets/
+audio/
+backups/
+integration.json
+startup-shortcut.json
+autostart-install.json
+config.toml

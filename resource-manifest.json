@@ -1,0 +1,8 @@
+{
+  "assets/spritesheet.png": "a108c6953a75908290dac7cf36cbee8ef8c19195153116c113331421b6f82d1b",
+  "audio/click_lets_go.wav": "c39c6157d071f17acec7b12374ecb1c4a3407444eddbd5674298d024b077734a",
+  "audio/click_magic_nyan.wav": "1415d8d53396faf68434f583793a4f0d82f884ac333fd40b9cb052b65779ae41",
+  "audio/click_special.wav": "597cfc62c43ceb0705ed7f0982beed29dfcc2357bedc2d4ac474bc9ff7d634e4",
+  "audio/complete_done.wav": "0217e73affec41ce28435150ddb6ee190aef06c137e51868fa4cabb247eacf08",
+  "audio/complete_yay.wav": "79e73f60d2be5452638907af1e679d2b22a89ae78a7466b4beaf8d6db29da8c1"
+}

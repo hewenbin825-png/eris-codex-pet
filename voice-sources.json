@@ -1,0 +1,65 @@
+{
+  "character": "艾莉丝 / Eris Boreas Greyrat",
+  "language": "ja",
+  "source_title": "【无职转生】艾莉丝·格雷拉特全语音台词收录",
+  "source_url": "https://www.bilibili.com/video/BV1QM41137S5/",
+  "source_uploader": "快乐老鲁迪",
+  "source_date": "2023-05-07",
+  "cast_reference": "https://mushokutensei.jp/staff-cast/",
+  "voice_actor": "加隈亜衣",
+  "processed": "2026-10-19",
+  "processing": "PCM16 mono 44100 Hz; loudness -20 LUFS target; gentle edge fades; playback gain 65%",
+  "verification": "Japanese ASR and short-clip boundaries checked; ASR is imperfect. Native click and real completion verification are reported separately.",
+  "clips": [
+    {
+      "file": "click_special.wav",
+      "label": "这是特别待遇哦",
+      "transcript": "特別なんだからね",
+      "start": 82.65,
+      "end": 84.35,
+      "duration": 1.7,
+      "peak": 0.42547607421875,
+      "sha256": "597cfc62c43ceb0705ed7f0982beed29dfcc2357bedc2d4ac474bc9ff7d634e4"
+    },
+    {
+      "file": "click_magic_nyan.wav",
+      "label": "请教艾莉丝魔法喵",
+      "transcript": "エリスに魔術を教えてくださいニャン",
+      "start": 98.15,
+      "end": 101.65,
+      "duration": 3.5,
+      "peak": 0.37158203125,
+      "sha256": "1415d8d53396faf68434f583793a4f0d82f884ac333fd40b9cb052b65779ae41"
+    },
+    {
+      "file": "click_lets_go.wav",
+      "label": "出发吧",
+      "transcript": "行くわよ",
+      "start": 143.25,
+      "end": 144.4,
+      "duration": 1.15,
+      "peak": 0.214691162109375,
+      "sha256": "c39c6157d071f17acec7b12374ecb1c4a3407444eddbd5674298d024b077734a"
+    },
+    {
+      "file": "complete_done.wav",
+      "label": "完成了",
+      "transcript": "できた",
+      "start": 190.85,
+      "end": 191.68,
+      "duration": 0.83,
+      "peak": 0.367034912109375,
+      "sha256": "0217e73affec41ce28435150ddb6ee190aef06c137e51868fa4cabb247eacf08"
+    },
+    {
+      "file": "complete_yay.wav",
+      "label": "太好了",
+      "transcript": "やった",
+      "start": 202.75,
+      "end": 204.5,
+      "duration": 1.75,
+      "peak": 0.289825439453125,
+      "sha256": "79e73f60d2be5452638907af1e679d2b22a89ae78a7466b4beaf8d6db29da8c1"
+    }
+  ]
+}

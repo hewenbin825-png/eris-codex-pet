@@ -1,0 +1,29 @@
+{
+  "sprite_author": "ga hing",
+  "sprite_source": "https://github.com/yznzl/roxy-pet",
+  "sprite_sha256": "b98d1a0073936bbaa6d97a4d30499183cae238b1b215152314d28ccf9f8b376d",
+  "art_changes": "None. Original RGBA pixels converted from WebP to PNG for Windows rendering.",
+  "magic_nyan": {
+    "episode": 6,
+    "reference": "https://dengekionline.com/articles/67738/",
+    "official_preview": "https://www.youtube.com/watch?v=XJrTjlNImzc",
+    "original_still": "https://pbs.twimg.com/media/EuWtaBLWQAA94hN.jpg",
+    "observed": "Both hands grasp side hair, lifted by the temples. Little fingers raised; wink in the delivery.",
+    "mapping": "original atlas row 6 (waiting), six distinct poses, with wink near the end of the clip"
+  },
+  "special": {
+    "reference": "https://anime.toki23.com/mushokutensei-ep05",
+    "context": "Episode 5: Eris allows Rudeus to use her given name as a special privilege.",
+    "mapping": "Proud pose from the existing chibi atlas; an adaptation of her attitude, not an exact shot reconstruction."
+  },
+  "lets_go": {
+    "reference": "https://ameblo.jp/aoilena/entry-12658196595.html",
+    "context": "Episode 7 training reference: Eris pushes off and rushes forward, with her hair streaming behind her.",
+    "mapping": "Existing running frames, adapted to the phrase; exact source shot for this short clip not established."
+  },
+  "completion": {
+    "reference": "https://www.crowsworldofanime.com/posts/mushoku-tensei-jobless-reincarnation-episode-6-review-best-in-show/",
+    "context": "Eris joyfully succeeds at making a fireball during lessons.",
+    "mapping": "Existing cheerful nod and raised-fist jump, adapted as task completion reactions."
+  }
+}

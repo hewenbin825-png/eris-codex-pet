@@ -1,0 +1,14 @@
+{
+  "muted": false,
+  "volume": 0.65,
+  "size": 160,
+  "click": [
+    "click_magic_nyan.wav",
+    "click_special.wav",
+    "click_lets_go.wav"
+  ],
+  "completion": [
+    "complete_done.wav",
+    "complete_yay.wav"
+  ]
+}
