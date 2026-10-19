@@ -105,7 +105,7 @@ def install():
         raise
     print('Installed to: '+str(TARGET))
     print('Hide the native Codex pet from its menu. Restart Codex after active work finishes to reload notify.')
-    print('Click/motion playback is verified; automatic task completion still requires a real-event check on your machine.')
+    print('Automatic completion passed two real desktop turns on the release test machine. Verify one real turn on your own installation.')
 
 def remove():
     info=json.loads((TARGET/'integration.json').read_text('utf8'))

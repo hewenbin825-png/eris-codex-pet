@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-19",
+  "release": "v2.0.1",
+  "app_version": "26.1013.4894.0",
+  "target": "Windows x64",
+  "passed": true,
+  "real_desktop_turns": 2,
+  "synthetic_completion_used": false,
+  "manual_completion_used": false,
+  "user_confirmation": "Two real desktop requests automatically played voice and motion without clicking the pet.",
+  "tests": [
+    {
+      "test": 1,
+      "real_desktop_turn_completed": true,
+      "turn_hash_matched": true,
+      "delivered_count": 1,
+      "helper_exit_code": 0,
+      "playback_event": "completion",
+      "playback_origin": "signal",
+      "clip": "complete_yay.wav",
+      "sound_player_completed": true,
+      "muted": false,
+      "volume_nonzero": true,
+      "user_confirmed_audio_and_motion": true
+    },
+    {
+      "test": 2,
+      "real_desktop_turn_completed": true,
+      "turn_hash_matched": true,
+      "delivered_count": 1,
+      "helper_exit_code": 0,
+      "playback_event": "completion",
+      "playback_origin": "signal",
+      "clip": "complete_yay.wav",
+      "sound_player_completed": true,
+      "muted": false,
+      "volume_nonzero": true,
+      "user_confirmed_audio_and_motion": true
+    }
+  ],
+  "limits": [
+    "Current local Windows desktop installation only.",
+    "Windows re-login and full application stop/start were not exercised.",
+    "No microphone or loopback recording was captured."
+  ]
+}

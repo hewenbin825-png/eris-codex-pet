@@ -1,11 +1,11 @@
 {
   "date": "2026-10-19",
-  "release": "v2.0.0",
+  "release": "v2.0.1",
   "target": "Windows x64",
   "source_build": "passed",
   "motion_self_test": {
     "passed": true,
-    "version": "2.0-motion",
+    "version": "2.0.1-motion",
     "clips": 5,
     "nonrepeat_selections": 200,
     "timeline_boundaries": true,
@@ -24,7 +24,11 @@
   "private_path_and_secret_pattern_check": "passed",
   "user_confirmed_click_audio_and_motion": true,
   "actual_monitor_launch_observed": true,
-  "real_codex_completion_verified": false,
+  "real_codex_completion_verified": true,
+  "real_desktop_completion_turns": 2,
+  "user_confirmed_automatic_audio_and_motion": true,
+  "windows_process_lock_regression": "passed; 12 duplicates -> 1 signal; 6 unique turns -> 6 signals; helper mocked",
+  "helper_failure_retry_regression": "passed; nonzero exit, OSError and timeout remain retryable",
   "windows_relogin_verified": false,
   "full_codex_restart_verified": false
 }

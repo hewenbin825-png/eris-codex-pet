@@ -172,7 +172,7 @@ internal static class ErisVoice {
             finally{
                 if(!closing){try{dispatcher.BeginInvoke((Action)(()=>{
                     if(token!=playId)return;currentPlayer=null;pet.StopMotion();busy=false;activeClip="";
-                    if(error==null){if(kind=="click")clickCount++;else completionCount++;Log((preview?"preview_":"")+kind,chosen,origin,delay);}else Log("play_error",error,origin,delay);
+                    if(error==null){if(kind=="click")clickCount++;else completionCount++;Log((preview?"preview_":"")+kind,chosen,origin,delay,!silent,silent,gain);}else Log("play_error",error,origin,delay);
                     Status("running",error);bool next=pendingCompletion;pendingCompletion=false;if(next)Play("completion",false,null,"queued_completion");
                 }));}catch(InvalidOperationException){}}
             }
@@ -192,12 +192,12 @@ internal static class ErisVoice {
             }pos=start+len+(len&1);
         }throw new InvalidDataException("No samples");
     }
-    static void Log(string kind,string clip,string origin,double delay){try{
+    static void Log(string kind,string clip,string origin,double delay,bool soundCompleted=false,bool wasMuted=false,double gain=0){try{
         string p=Path.Combine(Runtime,"events.jsonl");if(File.Exists(p)&&new FileInfo(p).Length>262144)File.Move(p,p+"."+DateTime.UtcNow.Ticks);
-        File.AppendAllText(p,Json.Serialize(new{utc=DateTime.UtcNow.ToString("o"),kind=kind,clip=clip,origin=origin,animation=motions.ContainsKey(clip)?motions[clip].label:null,start_dispatch_delay_ms=Math.Round(delay,2)})+Environment.NewLine,new UTF8Encoding(false));
+        File.AppendAllText(p,Json.Serialize(new{utc=DateTime.UtcNow.ToString("o"),kind=kind,clip=clip,origin=origin,animation=motions.ContainsKey(clip)?motions[clip].label:null,start_dispatch_delay_ms=Math.Round(delay,2),sound_player_completed=soundCompleted,muted_at_start=wasMuted,volume=gain})+Environment.NewLine,new UTF8Encoding(false));
     }catch{}}
     static void Status(string state,string error){try{
-        File.WriteAllText(Path.Combine(Runtime,"status.json"),Json.Serialize(new{state=state,version="2.0-motion",pid=Process.GetCurrentProcess().Id,mouse_hook=false,
+        File.WriteAllText(Path.Combine(Runtime,"status.json"),Json.Serialize(new{state=state,version="2.0.1-motion",pid=Process.GetCurrentProcess().Id,mouse_hook=false,
             own_pet_window=pet!=null&&!pet.IsDisposed,visible=pet!=null&&!pet.IsDisposed&&pet.Visible,clicks=clickCount,completions=completionCount,muted=muted,
             active_clip=activeClip,rendered_frames=pet==null?0:pet.RenderCount,error=error}),new UTF8Encoding(false));
     }catch{}}
@@ -209,7 +209,7 @@ internal static class ErisVoice {
             int i=0;foreach(var entry in motions){var f=entry.Value.FrameAt(entry.Value.duration_ms*.8);g.DrawImage(atlas,new Rectangle(i++*192,0,192,208),new Rectangle(f[1]*192,f[0]*208,192,208),GraphicsUnit.Pixel);}
             preview.Save(Path.Combine(Runtime,"render-check.png"),ImageFormat.Png);
         }
-        File.WriteAllText(Path.Combine(Runtime,"self-test.json"),Json.Serialize(new{passed=true,version="2.0-motion",clips=motions.Count,nonrepeat_selections=200,
+        File.WriteAllText(Path.Combine(Runtime,"self-test.json"),Json.Serialize(new{passed=true,version="2.0.1-motion",clips=motions.Count,nonrepeat_selections=200,
             timeline_boundaries=true,wav_duration_matches=true,rendered=true,global_mouse_hook=false}),new UTF8Encoding(false));atlas.Dispose();return 0;
     }catch(Exception e){File.WriteAllText(Path.Combine(Runtime,"self-test.json"),Json.Serialize(new{passed=false,error=e.Message}));return 1;}}
     [DllImport("user32.dll")]static extern bool SetProcessDpiAwarenessContext(IntPtr context);

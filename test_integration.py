@@ -1,6 +1,6 @@
 """Offline tests. No real startup entries, signals, or Codex configuration edits."""
 from pathlib import Path
-import json,tempfile,tomllib
+import json,tempfile,tomllib,subprocess
 from unittest.mock import patch
 import notify as notification
 import setup_codex as setup
@@ -28,13 +28,18 @@ def tests():
         (root/'integration.json').write_text(json.dumps({'previous_notify':native,'installed_notify':own}),'utf8')
         payload=json.dumps({'type':'agent-turn-complete','thread-id':'test','turn-id':'1','last-assistant-message':'PRIVATE_TEXT_SENTINEL'})
         calls=[]
-        with patch.object(notification,'ROOT',root),patch.object(notification,'current_route',return_value=wrapped),patch.object(notification.subprocess,'Popen',side_effect=lambda argv,**kw:calls.append(argv)):
+        with patch.object(notification,'ROOT',root),patch.object(notification,'current_route',return_value=wrapped),patch.object(notification.subprocess,'Popen',side_effect=lambda argv,**kw:calls.append(argv)),patch.object(notification.subprocess,'run',side_effect=lambda argv,**kw:(calls.append(argv) or subprocess.CompletedProcess(argv,0))):
             notification.main([payload]);notification.main([payload])
             notification.main(['{"type":"approval-requested"}']);notification.main(['invalid-json'])
             assert calls==[[str(root/'ErisVoice.exe'),'--completion']]
         log=(root/'runtime'/'notify-delivery.jsonl').read_text('utf8')
         assert 'PRIVATE_TEXT_SENTINEL' not in log and 'last-assistant-message' not in log
         assert 'duplicate_suppressed' in log
+        with patch.object(notification,'ROOT',root),patch.object(notification,'current_route',return_value=wrapped),patch.object(notification,'signal_helper',side_effect=[3,OSError('fixture'),subprocess.TimeoutExpired('fixture',12),0]) as signal:
+            retry=json.dumps({'type':'agent-turn-complete','thread-id':'test','turn-id':'retry'})
+            for _ in range(5):notification.main([retry])
+            assert signal.call_count==4,'Failed signals must remain retryable; success is deduplicated'
+        assert (root/'runtime'/'notify-delivery.jsonl').read_text('utf8').count('helper_signal_failed')==3
     with tempfile.TemporaryDirectory(prefix='eris-install-test-') as folder:
         codex=Path(folder);config=codex/'config.toml';target=codex/'pets'/'eris'/'voice'
         before='notify = ["prior.exe", "notify"] # original\nmodel = "example-model"\n[features]\na = true\n'
