@@ -2,6 +2,8 @@
   "muted": false,
   "volume": 0.65,
   "size": 160,
+  "captions_enabled": true,
+  "bubble_theme": "adventure",
   "click": [
     "click_magic_nyan.wav",
     "click_special.wav",

@@ -24,7 +24,15 @@
 - [原作第 6 集](https://mushokutensei.jp/story/6/)与[第 7 集](https://mushokutensei.jp/story/7/)情节参考。
 - 具体图集帧、动作含义及参考链接见 [motion-references.json](motion-references.json)。
 
+## 气泡主题插画
+
+v2.2.0 的 `bubble-eris-adventure.png` 为内置 imagegen 生成的艾莉丝同人主题插画，采用角色、旅途城镇和羊皮纸意象，非官方美术。生成提示词与参考来源见 [THEME.md](THEME.md)。既有角色图集没有被此主题替换。
+
 ## 新增程序
+
+v2.1.0 的信息窗口参考 [yono-code/PetLimitBars](https://github.com/yono-code/PetLimitBars) 的额度展示与刷新设计，以及 [TonyNa-code/desktop-pet](https://github.com/TonyNa-code/desktop-pet) 的气泡跟随、悬停延时与小窗口交互。未复制上述项目代码、图像或发行包。额度接口依据 [Codex App Server 官方文档](https://learn.chatgpt.com/docs/app-server) 独立实现。
+
+v2.2.0 参考 [valerieliang/desktop-pet](https://github.com/valerieliang/desktop-pet) 的可替换气泡背景、图片边缘保护和回退显示思路，独立实现了背景、按钮和提醒卡片。
 
 本仓库公开本地桌宠程序、启动监测器和接入脚本的源码，便于检查与学习。新增代码暂未附加独立的开源许可证；公开可见不等于对整个包授予任意再许可或商业使用权。若需要超出个人非商业展示范围的再利用，请先取得相应权利人的许可。
 

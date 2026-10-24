@@ -1,0 +1,51 @@
+{
+  "version": "v2.2.0",
+  "date": "2026-10-20",
+  "passed": true,
+  "method": "Own application IPC and state transitions on installed Windows process",
+  "checks": [
+    {
+      "name": "quota",
+      "shown": true,
+      "closed_by_timer": true,
+      "visible_seconds": 8.023,
+      "hover_observed_during_check": false,
+      "version": "2.2.0-adventure",
+      "theme_artwork_loaded": true,
+      "theme": "adventure",
+      "animations_enabled": true,
+      "peak_opacity": 1,
+      "opacity_before_hiding": 0.09310916666666268,
+      "live_quota_read_succeeded": true
+    },
+    {
+      "name": "reminders",
+      "shown": true,
+      "closed_by_timer": true,
+      "visible_seconds": 8.031,
+      "hover_observed_during_check": false,
+      "version": "2.2.0-adventure",
+      "theme_artwork_loaded": true,
+      "theme": "adventure",
+      "animations_enabled": true,
+      "peak_opacity": 1,
+      "opacity_before_hiding": 0.1836612499999963
+    },
+    {
+      "name": "caption",
+      "shown": true,
+      "closed_by_timer": true,
+      "visible_seconds": 8.027,
+      "hover_observed_during_check": false,
+      "version": "2.2.0-adventure",
+      "theme_artwork_loaded": true,
+      "theme": "adventure",
+      "animations_enabled": true,
+      "peak_opacity": 1,
+      "opacity_before_hiding": 0.12156041666667079
+    }
+  ],
+  "new_codex_test_chats": 0,
+  "native_mouse_hover_test": false,
+  "user_visual_confirmation_of_new_style": false
+}

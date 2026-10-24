@@ -16,7 +16,7 @@ def fake_signal():
     return 0
 n.signal_helper=fake_signal
 (n.ROOT/('ready-'+sys.argv[4])).write_text('ready')
-n.main([json.dumps({'type':'agent-turn-complete','thread-id':'fixture','turn-id':sys.argv[3],
+n.main([json.dumps({'type':'agent-turn-complete','source':'cli','thread-id':'fixture','turn-id':sys.argv[3],
                     'last-assistant-message':'PRIVATE_TEXT_SENTINEL'})])
 '''
 

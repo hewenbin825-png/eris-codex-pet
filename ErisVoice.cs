@@ -15,7 +15,8 @@ using System.Web.Script.Serialization;
 using System.Security.Principal;
 
 // Local companion: owns its transparent window. No global mouse hook, input
-// injection, screen capture, networking, or changes to the Codex application.
+// injection, screen capture or changes to the Codex application.
+// The optional quota panel queries the installed official CLI through stdio.
 public sealed class Motion {
     public string label, action;
     public int duration_ms;
@@ -44,15 +45,17 @@ internal static class ErisVoice {
     static NotifyIcon tray;
     static PetForm pet;
     static Control dispatcher;
-    static EventWaitHandle completed,clicked,stopped,nyan;
+    static EventWaitHandle completed,clicked,stopped,nyan,info,activity;
+    static PetPanels panels;
     static SoundPlayer currentPlayer;
     internal static ContextMenuStrip Menu;
 
     [STAThread] static int Main(string[] args) {
         Directory.CreateDirectory(Runtime);
         if(args.Length>0 && args[0]=="--self-test")return SelfTest();
+        if(args.Length>0 && args[0]=="--usage-check")return UsageCheck();
         if(args.Length>0){
-            string name=args[0]=="--completion"?"Completion":args[0]=="--click"?"Click":args[0]=="--nyan"?"Nyan":args[0]=="--stop"?"Stop":null;
+            string name=args[0]=="--completion"?"Completion":args[0]=="--click"?"Click":args[0]=="--nyan"?"Nyan":args[0]=="--stop"?"Stop":args[0]=="--info"?"Info":args[0]=="--activity"?"Activity":null;
             if(name==null)return 2;
             if(!Signal(name)&&name!="Stop"){
                 Process.Start(new ProcessStartInfo(Application.ExecutablePath){UseShellExecute=false,CreateNoWindow=true,WindowStyle=ProcessWindowStyle.Hidden});
@@ -73,19 +76,27 @@ internal static class ErisVoice {
                 clicked=new EventWaitHandle(false,EventResetMode.AutoReset,Prefix+"Click");
                 stopped=new EventWaitHandle(false,EventResetMode.AutoReset,Prefix+"Stop");
                 nyan=new EventWaitHandle(false,EventResetMode.AutoReset,Prefix+"Nyan");
+                info=new EventWaitHandle(false,EventResetMode.AutoReset,Prefix+"Info");
+                activity=new EventWaitHandle(false,EventResetMode.AutoReset,Prefix+"Activity");
                 Menu=BuildMenu();
                 pet=new PetForm(atlas);pet.ContextMenuStrip=Menu;
                 int size=GetInt("size",160);
                 pet.SetSize(size);
                 Point initial=new Point(GetInt("x",Screen.PrimaryScreen.WorkingArea.Right-size-220),GetInt("y",Screen.PrimaryScreen.WorkingArea.Bottom-pet.Height-12));
                 pet.Location=pet.Clamp(initial);pet.Show();
-                tray=new NotifyIcon{Icon=SystemIcons.Information,Text="艾莉丝 · 动作与语音",ContextMenuStrip=Menu,Visible=true};
-                tray.DoubleClick+=delegate{pet.Show();Play("click",true,null,"tray");};
+                panels=new PetPanels(pet,settings,Save,()=>muted,()=>activeClip);
+                tray=new NotifyIcon{Icon=SystemIcons.Information,Text="艾莉丝 · 语音、额度与提醒",ContextMenuStrip=Menu,Visible=true};
+                tray.DoubleClick+=delegate{pet.Show();panels.OpenQuota();};
                 ThreadPool.QueueUserWorkItem(delegate{
                     try{
-                        var waits=new WaitHandle[]{completed,clicked,stopped,nyan};
+                        var waits=new WaitHandle[]{completed,clicked,stopped,nyan,info,activity};
                         while(!closing){int n=WaitHandle.WaitAny(waits);if(closing)break;
-                            dispatcher.BeginInvoke((Action)(()=>{if(n==2)Application.Exit();else Play(n==0?"completion":"click",n!=0,n==3?"click_magic_nyan.wav":null,"signal");}));
+                            dispatcher.BeginInvoke((Action)(()=>{
+                                if(n==2)Application.Exit();
+                                else if(n==4){pet.Show();panels.OpenQuota();}
+                                else if(n==5){pet.Show();panels.OpenActivity();}
+                                else Play(n==0?"completion":"click",n!=0,n==3?"click_magic_nyan.wav":null,"signal");
+                            }));
                             if(n==2)break;
                         }
                     }catch(ObjectDisposedException){}
@@ -94,6 +105,7 @@ internal static class ErisVoice {
             }catch(Exception ex){failed=true;Status("error",ex.GetType().Name+": "+ex.Message);return 1;}
             finally{
                 closing=true;if(currentPlayer!=null)currentPlayer.Stop();
+                if(panels!=null)panels.Dispose();
                 if(pet!=null){SavePosition();pet.Dispose();}
                 if(tray!=null)tray.Dispose();if(Menu!=null)Menu.Dispose();
                 if(atlas!=null)atlas.Dispose();if(!failed)Status("stopped",null);
@@ -124,6 +136,19 @@ internal static class ErisVoice {
     }
     static ContextMenuStrip BuildMenu(){
         var menu=new ContextMenuStrip();
+        menu.Items.Add("剩余额度与重置时间",null,delegate{pet.Show();panels.OpenQuota();});
+        menu.Items.Add("任务完成提醒记录",null,delegate{pet.Show();panels.OpenActivity();});
+        var captions=new ToolStripMenuItem("显示语音字幕气泡"){CheckOnClick=true,Checked=!settings.ContainsKey("captions_enabled")||Object.Equals(settings["captions_enabled"],true)};
+        captions.CheckedChanged+=delegate{panels.CaptionsEnabled=captions.Checked;};menu.Items.Add(captions);
+        var themes=new ToolStripMenuItem("气泡外观");
+        var adventure=new ToolStripMenuItem("无职转生 · 冒险手账");
+        var plain=new ToolStripMenuItem("简洁米白");
+        adventure.Click+=delegate{panels.Theme="adventure";};
+        plain.Click+=delegate{panels.Theme="plain";};
+        themes.DropDownOpening+=delegate{adventure.Checked=panels.Theme=="adventure";plain.Checked=panels.Theme=="plain";};
+        themes.DropDownItems.Add(adventure);themes.DropDownItems.Add(plain);menu.Items.Add(themes);
+        menu.Items.Add("收起所有气泡",null,delegate{panels.HideAll();});
+        menu.Items.Add(new ToolStripSeparator());
         var preview=new ToolStripMenuItem("台词与动作");
         foreach(string f in clicks.Concat(completions)){string clip=f;preview.DropDownItems.Add(motions[f].label,null,delegate{pet.Show();Play(clicks.Contains(clip)?"click":"completion",true,clip,"menu");});}
         menu.Items.Add(preview);
@@ -161,7 +186,7 @@ internal static class ErisVoice {
                 using(var stream=new MemoryStream(wav.Bytes))using(var player=new SoundPlayer(stream)){
                     if(!silent)player.Load();
                     long started=0;
-                    dispatcher.Invoke((Action)(()=>{if(closing)return;currentPlayer=player;started=Stopwatch.GetTimestamp();pet.StartMotion(motions[chosen],started);}));
+                    dispatcher.Invoke((Action)(()=>{if(closing)return;currentPlayer=player;panels.Say(chosen,kind,motions[chosen].duration_ms,silent);started=Stopwatch.GetTimestamp();pet.StartMotion(motions[chosen],started);}));
                     if(closing)return;
                     delay=(Stopwatch.GetTimestamp()-started)*1000.0/Stopwatch.Frequency;
                     if(!silent)player.PlaySync();
@@ -173,6 +198,7 @@ internal static class ErisVoice {
                 if(!closing){try{dispatcher.BeginInvoke((Action)(()=>{
                     if(token!=playId)return;currentPlayer=null;pet.StopMotion();busy=false;activeClip="";
                     if(error==null){if(kind=="click")clickCount++;else completionCount++;Log((preview?"preview_":"")+kind,chosen,origin,delay,!silent,silent,gain);}else Log("play_error",error,origin,delay);
+                    panels.PlaybackFinished();
                     Status("running",error);bool next=pendingCompletion;pendingCompletion=false;if(next)Play("completion",false,null,"queued_completion");
                 }));}catch(InvalidOperationException){}}
             }
@@ -197,7 +223,7 @@ internal static class ErisVoice {
         File.AppendAllText(p,Json.Serialize(new{utc=DateTime.UtcNow.ToString("o"),kind=kind,clip=clip,origin=origin,animation=motions.ContainsKey(clip)?motions[clip].label:null,start_dispatch_delay_ms=Math.Round(delay,2),sound_player_completed=soundCompleted,muted_at_start=wasMuted,volume=gain})+Environment.NewLine,new UTF8Encoding(false));
     }catch{}}
     static void Status(string state,string error){try{
-        File.WriteAllText(Path.Combine(Runtime,"status.json"),Json.Serialize(new{state=state,version="2.0.1-motion",pid=Process.GetCurrentProcess().Id,mouse_hook=false,
+        File.WriteAllText(Path.Combine(Runtime,"status.json"),Json.Serialize(new{state=state,version="2.2.0-adventure",pid=Process.GetCurrentProcess().Id,mouse_hook=false,
             own_pet_window=pet!=null&&!pet.IsDisposed,visible=pet!=null&&!pet.IsDisposed&&pet.Visible,clicks=clickCount,completions=completionCount,muted=muted,
             active_clip=activeClip,rendered_frames=pet==null?0:pet.RenderCount,error=error}),new UTF8Encoding(false));
     }catch{}}
@@ -209,9 +235,17 @@ internal static class ErisVoice {
             int i=0;foreach(var entry in motions){var f=entry.Value.FrameAt(entry.Value.duration_ms*.8);g.DrawImage(atlas,new Rectangle(i++*192,0,192,208),new Rectangle(f[1]*192,f[0]*208,192,208),GraphicsUnit.Pixel);}
             preview.Save(Path.Combine(Runtime,"render-check.png"),ImageFormat.Png);
         }
-        File.WriteAllText(Path.Combine(Runtime,"self-test.json"),Json.Serialize(new{passed=true,version="2.0.1-motion",clips=motions.Count,nonrepeat_selections=200,
+        ErisPanelTests.Run(Root);
+        File.WriteAllText(Path.Combine(Runtime,"self-test.json"),Json.Serialize(new{passed=true,version="2.2.0-adventure",clips=motions.Count,nonrepeat_selections=200,
             timeline_boundaries=true,wav_duration_matches=true,rendered=true,global_mouse_hook=false}),new UTF8Encoding(false));atlas.Dispose();return 0;
     }catch(Exception e){File.WriteAllText(Path.Combine(Runtime,"self-test.json"),Json.Serialize(new{passed=false,error=e.Message}));return 1;}}
+    static int UsageCheck(){try{
+        using(var client=new UsageClient()){
+            var data=client.Read();UsageData.Save(Path.Combine(Runtime,"usage-cache.json"),data);
+            File.WriteAllText(Path.Combine(Runtime,"usage-check.json"),Json.Serialize(new{passed=true,source="Codex app-server",window_count=data.windows.Count,
+                methods=new[]{"initialize","account/rateLimits/read"},inference_started=false}),new UTF8Encoding(false));return 0;
+        }
+    }catch(Exception ex){File.WriteAllText(Path.Combine(Runtime,"usage-check.json"),Json.Serialize(new{passed=false,error_type=ex.GetType().Name}));return 1;}}
     [DllImport("user32.dll")]static extern bool SetProcessDpiAwarenessContext(IntPtr context);
 }
 

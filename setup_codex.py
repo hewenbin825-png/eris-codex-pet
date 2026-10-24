@@ -10,7 +10,9 @@ CONFIG=CODEX/'config.toml'
 TARGET=CODEX/'pets'/'eris'/'voice'
 NO_WINDOW=getattr(subprocess,'CREATE_NO_WINDOW',0)
 PATTERN=r'(?m)^notify\s*=\s*\[[^\r\n]*\][ \t]*(?:#[^\r\n]*)?(?=\r?$)'
-FILES=['ErisVoice.exe','ErisVoice.cs','ErisCodexStartup.exe','ErisCodexStartup.cs','notify.py','notify_route.py',
+FILES=['ErisVoice.exe','ErisVoice.cs','ErisCodexStartup.exe','ErisCodexStartup.cs','notify.py','notify_route.py','notify_scope.py',
+       'ErisUsage.cs','ErisPanels.cs','ErisSkin.cs','ErisPanelTests.cs','Open-Quota.cmd','Open-Reminders.cmd',
+       'bubble-eris-adventure.png','THEME.md',
        'settings.json','motions.json','setup_codex.py','build.py','resource-manifest.json','resources.zip',
        'README.md','THIRD-PARTY-NOTICES.md','voice-sources.json','motion-references.json']
 

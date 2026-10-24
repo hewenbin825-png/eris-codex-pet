@@ -12,6 +12,7 @@ import time
 import errno
 from contextlib import contextmanager
 from notify_route import previous_to_run
+from notify_scope import codex_home, completion_scope
 
 ROOT = Path(__file__).resolve().parent
 NO_WINDOW = getattr(subprocess, 'CREATE_NO_WINDOW', 0)
@@ -86,6 +87,12 @@ def main(args=None):
     if not accepted:
         return 0
     message = json.loads(args[-1])
+    scope, evidence = completion_scope(message, codex_home(cfg))
+    if scope != 'main':
+        # Stop before the helper IPC: no audio, animation, captions, reminder
+        # history or pending completion is created for a child/unresolved event.
+        audit('completion_suppressed', scope=scope, evidence=evidence)
+        return 0
     turn = message.get('turn-id')
     runtime = ROOT / 'runtime'
     runtime.mkdir(exist_ok=True)

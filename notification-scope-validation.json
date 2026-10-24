@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-24",
+  "passed": true,
+  "ownership_regression_tests": 10,
+  "integration_regression": "passed",
+  "windows_concurrency_regression": "passed",
+  "existing_local_thread_metadata_checked": {
+    "main": 132,
+    "subagent": 360
+  },
+  "installed_entrypoint_replay": {
+    "child_suppressed": true,
+    "nested_child_suppressed": true,
+    "indexed_child_suppressed": true,
+    "guardian_suppressed": true,
+    "unknown_suppressed": true,
+    "main_helper_calls": 1,
+    "duplicate_main_suppressed": true
+  },
+  "new_live_subagent_task_created": false,
+  "helper_playback_mocked": true,
+  "codex_config_changed": false,
+  "user_settings_changed": false,
+  "runtime_restart_required": false,
+  "private_thread_ids_or_messages_included": false
+}

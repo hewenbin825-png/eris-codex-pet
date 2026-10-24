@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-20",
+  "version": "v2.2.0",
+  "offline_checks": {
+    "passed": true,
+    "multi_bucket": true,
+    "unknown_not_zero": true,
+    "single_week_window": true,
+    "remaining_clamped": true,
+    "stale_cache": true,
+    "failure_retains_marked_cache": true,
+    "private_fields_excluded": true,
+    "completion_only_history": true,
+    "bilingual_captions": 5,
+    "legacy_caption_filename": true,
+    "missing_caption_safe": true,
+    "screen_placements": 27,
+    "render_previews": 6,
+    "real_desktop_input_test": false,
+    "live_quota_query": false,
+    "adventure_artwork_loaded": true,
+    "plain_theme": true,
+    "missing_artwork_fallback": true,
+    "fade_in_out": true,
+    "hover_restores_opacity": true,
+    "system_animation_preference": true,
+    "bubble_auto_hide_seconds": 8,
+    "hover_pauses_countdown": true,
+    "loading_defers_countdown": true,
+    "loading_hold_bounded": true,
+    "reopen_resets_countdown": true,
+    "rounded_borderless_bubbles": true
+  },
+  "live_read_only_quota_query_on_v2_1_0": {
+    "passed": true,
+    "source": "Codex app-server",
+    "window_count": 1,
+    "methods": [
+      "initialize",
+      "account/rateLimits/read"
+    ],
+    "inference_started": false
+  },
+  "installed_quota_window_read_succeeded": true,
+  "local_deployment_verified": true,
+  "codex_config_and_notify_preserved": true,
+  "native_ui_baseline": {
+    "version": "v2.1.0",
+    "user_confirmed_all_three_normal": true
+  },
+  "installed_bubble_lifecycle": {
+    "version": "v2.2.0",
+    "date": "2026-10-20",
+    "passed": true,
+    "method": "Own application IPC and state transitions on installed Windows process",
+    "checks": [
+      {
+        "name": "quota",
+        "shown": true,
+        "closed_by_timer": true,
+        "visible_seconds": 8.023,
+        "hover_observed_during_check": false,
+        "version": "2.2.0-adventure",
+        "theme_artwork_loaded": true,
+        "theme": "adventure",
+        "animations_enabled": true,
+        "peak_opacity": 1,
+        "opacity_before_hiding": 0.09310916666666268,
+        "live_quota_read_succeeded": true
+      },
+      {
+        "name": "reminders",
+        "shown": true,
+        "closed_by_timer": true,
+        "visible_seconds": 8.031,
+        "hover_observed_during_check": false,
+        "version": "2.2.0-adventure",
+        "theme_artwork_loaded": true,
+        "theme": "adventure",
+        "animations_enabled": true,
+        "peak_opacity": 1,
+        "opacity_before_hiding": 0.1836612499999963
+      },
+      {
+        "name": "caption",
+        "shown": true,
+        "closed_by_timer": true,
+        "visible_seconds": 8.027,
+        "hover_observed_during_check": false,
+        "version": "2.2.0-adventure",
+        "theme_artwork_loaded": true,
+        "theme": "adventure",
+        "animations_enabled": true,
+        "peak_opacity": 1,
+        "opacity_before_hiding": 0.12156041666667079
+      }
+    ],
+    "new_codex_test_chats": 0,
+    "native_mouse_hover_test": false,
+    "user_visual_confirmation_of_new_style": false
+  },
+  "user_confirmed_new_bubble_style_and_hover": false,
+  "previews": "Native controls rendered offscreen with example data; not desktop screenshots.",
+  "private_data_included": false
+}
